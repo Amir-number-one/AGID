@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سند تعهدنامه تحریم دنی</title>
+    <!-- لود کردن Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Tahoma', sans-serif;
+            direction: rtl;
+            background-color: #f7f7f7;
+        }
+        /* استایل خاص برای فیلدهای قرارداد */
+        input[type="text"], select {
+            /* ظاهر خط زیرین برای حس رسمی بودن سند */
+            border-bottom: 2px solid #ddd !important;
+            border-radius: 0 !important;
+            border-top: none !important;
+            border-left: none !important;
+            border-right: none !important;
+            padding-right: 0.5rem;
+        }
+        /* استایل پایه برای تمام صفحه موفقیت که دینامیک ساخته می شود */
+        .full-screen-success {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 50;
+            background-color: #f7f7f7;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'treaty-primary': '#1e3a8a', /* آبی تیره برای حس رسمی */
+                        'treaty-secondary': '#dbeafe',
+                        'danger': '#dc2626', /* قرمز برای تأکید بر تحریم */
+                        'warning': '#facc15', /* زرد برای هشدار */
+                        'success': '#10b981', /* سبز برای پاداش و مزایا */
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="p-4 sm:p-8">
+
+    <!-- 1. محتوای اصلی فرم -->
+    <div id="main-content" class="max-w-4xl mx-auto bg-white p-6 sm:p-12 rounded-lg shadow-2xl border-2 border-treaty-primary">
+        
+        <!-- بلوک راهنمای ضبط ویدیو -->
+        <div class="mb-8 p-4 bg-treaty-secondary/70 border-l-4 border-treaty-primary rounded-lg text-gray-800 text-center text-sm font-semibold shadow-inner">
+            <p class="text-treaty-primary text-base font-extrabold mb-1">⚠️ دستورالعمل امنیتی الزامی ⚠️</p>
+            <p>
+                لطفاً پیش از شروع پر کردن فرم، از کل فرآیند تکمیل و ارسال تعهدنامه، <strong class="font-extrabold">اسکرین ویدیو (Screen Video)</strong> ضبط نمایید. این ویدیو سند اجرای صحیح و داوطلبانه مفاد است.
+            </p>
+        </div>
+
+        <!-- عنوان و پرچم اتحادیه (تخیلی) -->
+        <header class="text-center mb-10 border-b pb-4 border-treaty-secondary">
+            <h1 class="text-4xl font-extrabold text-treaty-primary mb-2">سند تعهدنامه بین‌المللی داوطلبان</h1>
+            <h2 class="text-xl font-medium text-gray-700">اتحادیه جهانی تحریم و نادیده‌گیری کامل (A.G.I.D.)</h2>
+        </header>
+
+        <!-- پیام وضعیت / موفقیت (فقط برای خطاهای اعتبارسنجی) -->
+        <div id="status-message" class="mb-6 p-4 rounded-lg text-center font-bold hidden" role="alert"></div>
+
+        <!-- مقدمه رسمی -->
+        <section class="mb-8 p-4 bg-treaty-secondary rounded-lg text-gray-800 text-base leading-relaxed">
+            <p class="mb-4 font-bold">ماده ۱: هدف تعهدنامه</p>
+            <p>این سند به منظور ثبت و تأیید پیوستن داوطلبین محترم به "اتحادیه جهانی تحریم و نادیده‌گیری کامل" (Anti-Gaze & Ignore Detachment - AGID) تنظیم گردیده است. فرد متعهد با پر کردن این فرم، التزام خود را به رعایت کامل و بی‌قید و شرط پروتکل‌های نادیده‌گیری شخص مورد اشاره، به نام <span class="font-bold text-danger">"دنی" (Dani)</span>، اعلام می‌دارد.</p>
+        </section>
+
+        <form id="treaty-form" class="space-y-8">
+            
+            <!-- بخش ۱: اطلاعات هویتی متعهد -->
+            <div class="border-t border-gray-300 pt-6">
+                <h3 class="text-2xl font-semibold mb-6 text-treaty-primary border-r-4 border-treaty-primary pr-3">بخش ۱: ثبت هویت حقوقی</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- نام کامل -->
+                    <div class="space-y-1">
+                        <label for="full-name" class="block text-sm font-medium text-gray-700">نام و نام خانوادگی متعهد:</label>
+                        <input type="text" id="full-name" name="full_name" required placeholder="مثلاً: کوروش ملک‌زاده"
+                               class="mt-1 block w-full px-2 py-2 text-gray-900 focus:ring-treaty-primary focus:border-treaty-primary transition duration-150">
+                    </div>
+
+                    <!-- کشور محل سکونت (لیست محدود شده) -->
+                    <div class="space-y-1">
+                        <label for="country" class="block text-sm font-medium text-gray-700">کشور تحت نظر:</label>
+                        <select id="country" name="country" required
+                            class="mt-1 block w-full px-2 py-2 text-gray-900 focus:ring-treaty-primary focus:border-treaty-primary transition duration-150 bg-white">
+                            <option value="" disabled selected>کشور متعهد را انتخاب کنید</option>
+                            <option value="کره شمالی">کره شمالی</option>
+                            <option value="فرانسه">فرانسه</option>
+                            <option value="آلمان">آلمان</option>
+                            <option value="انگلستان">انگلستان</option>
+                            <option value="اسرائیل">اسرائیل</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- بخش ۲: سطح تعهد به تحریم و مدت زمان -->
+            <div class="border-t border-gray-300 pt-6">
+                <h3 class="text-2xl font-semibold mb-6 text-treaty-primary border-r-4 border-treaty-primary pr-3">بخش ۲: تعیین سطح تعهد و مدت زمان</h3>
+
+                <!-- سطح تعهد -->
+                <div class="space-y-4">
+                    <label class="block text-sm font-medium text-gray-700">سطح تعهد در اجرای بند نادیده‌گیری:</label>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <div class="flex items-center p-3 border rounded-lg hover:bg-treaty-secondary/50 transition duration-150">
+                            <input id="commitment-full" type="radio" name="commitment_level" value="سطح A (کامل - تمام پلتفرم‌ها)" class="h-4 w-4 text-treaty-primary border-gray-300 focus:ring-treaty-primary" required>
+                            <label for="commitment-full" class="mr-2 block text-sm font-bold text-gray-800">تعهد سطح A (کامل):</label>
+                            <span class="text-xs text-gray-600">نادیده‌گیری مطلق در تمام پلتفرم‌ها و فضاهای فیزیکی.</span>
+                        </div>
+                        <div class="flex items-center p-3 border rounded-lg hover:bg-treaty-secondary/50 transition duration-150">
+                            <input id="commitment-partial" type="radio" name="commitment_level" value="سطح B (محدود - فقط تلگرام)" class="h-4 w-4 text-treaty-primary border-gray-300 focus:ring-treaty-primary">
+                            <label for="commitment-partial" class="mr-2 block text-sm font-bold text-gray-800">تعهد سطح B (محدود):</label>
+                            <span class="text-xs text-gray-600 font-bold text-danger">فقط نادیده‌گیری در پیام‌رسان تلگرام.</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- مدت زمان -->
+                <div class="space-y-1 mt-6">
+                    <label for="duration" class="block text-sm font-medium text-gray-700">مدت تعهد:</label>
+                    <select id="duration" name="duration" required
+                            class="mt-1 block w-full px-2 py-2 text-gray-900 focus:ring-treaty-primary focus:border-treaty-primary transition duration-150 bg-white">
+                        <option value="۴ روز">۴ روز</option>
+                        <option value="۸ روز">۸ روز</option>
+                        <option value="۱۶ روز">۱۶ روز</option>
+                        <option value="تا اطلاع ثانوی">تا اطلاع ثانوی</option>
+                    </select>
+                    <p class="text-xs text-gray-500 mt-1">
+                        <strong class="font-bold text-red-500">توجه:</strong> پس از پایان مدت زمان انتخابی، برای تمدید تعهد، نیاز به پر کردن دوباره این فرم الزامی است.
+                    </p>
+                </div>
+            </div>
+
+            <!-- بخش ۳: پروتکل‌های ابلاغی تحریم (توضیح دلیل) -->
+            <div class="border-t border-gray-300 pt-6">
+                <h3 class="text-2xl font-semibold mb-6 text-treaty-primary border-r-4 border-treaty-primary pr-3">بخش ۳: پروتکل‌های ابلاغی تحریم</h3>
+                
+                <div class="p-5 bg-yellow-50 border-r-4 border-yellow-500 rounded-lg shadow-md">
+                    <p class="text-lg font-bold text-gray-800 mb-3">دلیل اجرایی شدن تحریم علیه دنی (Dani):</p>
+                    <ul class="list-disc pr-5 space-y-2 text-gray-700 leading-relaxed">
+                        <li>هدف اصلی از این تعهد، اعمال <span class="font-extrabold text-danger">نادیده‌گیری کامل و مستمر</span> شخص دنی است.</li>
+                        <li>این پروتکل‌ها به دلیل عدم مسئولیت‌پذیری و نقض مکرر قول‌ها و تعهدات دنی فعال شده‌اند.</li>
+                        <li>تحریم تا زمانی که دنی به صورت شفاف و ملموس اقدامات لازم برای جبران تعهدات معوقه خود را آغاز و تکمیل کند، به قوت خود باقی خواهد ماند.</li>
+                        <li>متعهد باید تا پایان مدت زمان قرارداد، به هیچ عنوان با دنی وارد تعامل، گفتگو یا تبادل اطلاعات نشود.</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- بخش ۴: مزایا و جوایز عضویت انحصاری -->
+            <div class="border-t border-gray-300 pt-6">
+                <h3 class="text-2xl font-semibold mb-6 text-success border-r-4 border-success pr-3">بخش ۴: مزایا و جوایز عضویت انحصاری</h3>
+                
+                <div class="p-5 bg-green-50 border-r-4 border-success rounded-lg shadow-md">
+                    <p class="text-lg font-extrabold text-success mb-3">امتیازات و سود عضویت در اتحادیه AGID:</p>
+                    <ol class="list-decimal pr-5 space-y-3 text-gray-800 leading-relaxed font-semibold">
+                        <li>
+                            <strong class="font-extrabold">گواهینامه سکوت استراتژیک:</strong> پس از اتمام موفقیت‌آمیز هر دوره تعهد (۴، ۸، یا ۱۶ روز)، <span class="text-success font-bold">"گواهینامه سکوت عدم پاسخگویی"</span> با مهر رسمی AGID صادر می‌شود که نشان‌دهنده انضباط فوق‌العاده متعهد است.
+                        </li>
+                        <li>
+                            <strong class="font-extrabold">دسترسی ویژه به سامانه Digital Ghosting:</strong> عضویت، دسترسی اختصاصی به «آرشیو لاگ‌های شبح‌سازی (Digital Ghosting Logs)» را فراهم می‌کند. این لاگ‌ها شامل تحلیل‌های آماری از فرکانس تلاش‌های دنی برای برقراری ارتباط در تلگرام است.
+                        </li>
+                        <li>
+                            <strong class="font-extrabold">امتیاز رأی مازاد:</strong> اعضای دارای سابقه تعهد بدون نقض، در فرآیند رأی‌گیری برای تعیین شدت مجازات ناقضان تعهد، از <span class="text-success font-bold">یک رأی مازاد (Super-Vote)</span> بهره‌مند خواهند شد.
+                        </li>
+                        <li>
+                            <strong class="font-extrabold">اعتبار بین‌المللی:</strong> نام متعهد در فهرست <span class="text-success font-bold">"ناظران سکوت جهانی"</span> ثبت شده و در صورت لزوم، در پیمان‌های آتی تحریم به‌عنوان یک عنصر کلیدی لحاظ خواهد شد.
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- بخش ۵: هشدارها و عواقب نقض تعهدنامه -->
+            <div class="border-t border-gray-300 pt-6">
+                <h3 class="text-2xl font-semibold mb-6 text-danger border-r-4 border-danger pr-3">بخش ۵: هشدارهای حقوقی و عواقب نقض تعهدنامه</h3>
+                
+                <div class="p-5 bg-red-100 border-r-4 border-red-600 rounded-lg shadow-md">
+                    <p class="text-lg font-extrabold text-red-800 mb-3">عواقب عدم رعایت پروتکل‌ها:</p>
+                    <ol class="list-decimal pr-5 space-y-3 text-gray-800 leading-relaxed font-semibold">
+                        <li>
+                            <span class="font-extrabold text-danger">تعیین مجازات با رأی‌گیری داخلی (بر اساس شدت نقض):</span> پس از ثبت و تأیید نقض تعهد، مجازات متعهد (که می‌تواند شامل اخراج، مشمولیت در پروتکل معکوس، یا هر دو باشد) بر اساس شدت ارتباط برقرار شده و با <span class="text-warning">رأی‌گیری داخلی و فوری</span> سایر اعضای اتحادیه تعیین و ابلاغ خواهد شد.
+                        </li>
+                        <li>
+                            <strong class="font-extrabold">اخراج فوری و درج در لیست سیاه:</strong> در صورت اثبات نقض عمدی پروتکل‌ها، فرد متعهد بلافاصله و با مهر <span class="text-danger">"بی‌تعهد و ناقض"</span> از اتحادیه اخراج خواهد شد.
+                        </li>
+                        <li>
+                            <strong class="font-extrabold">مشمول شدن در پروتکل معکوس:</strong> فرد ناقض، خود مشمول پروتکل نادیده‌گیری مضاعف AGID قرار می‌گیرد. این بدان معناست که تمامی اعضای اتحادیه موظف به نادیده گرفتن و تحریم کامل شخص ناقض خواهند بود.
+                        </li>
+                        <li>
+                            <strong class="font-extrabold">محرومیت دائم:</strong> نام متعهد به فهرست سیاه جهانی اتحادیه افزوده شده و برای همیشه از پیوستن به هرگونه "اتحادیه‌ نادیده‌گیری" یا "پیمان تحریم" در آینده محروم خواهد شد.
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
+
+            <!-- بخش ۶ (بخش تصدیق و تأیید نهایی) -->
+            <div class="border-t border-gray-300 pt-6">
+                <h3 class="text-2xl font-semibold mb-6 text-treaty-primary border-r-4 border-treaty-primary pr-3">بخش ۶: تصدیق و تأیید نهایی مفاد</h3>
+                
+                <p class="text-sm font-medium text-gray-700 mb-4">با علامت زدن موارد زیر، متعهد می‌شوم:</p>
+
+                <div class="space-y-3 bg-gray-50 p-4 rounded-lg border">
+                    <!-- بند ۱ -->
+                    <div class="flex items-start">
+                        <input id="clause1" name="clause1_protocol" type="checkbox" required
+                               class="h-4 w-4 text-treaty-primary border-gray-300 rounded focus:ring-treaty-primary mt-1">
+                        <label for="clause1" class="mr-2 block text-sm text-gray-900">
+                            پروتکل‌های ابلاغی AGID در خصوص محدودیت‌های ارتباطی با <span class="font-bold">"دنی"</span> را مطالعه کرده و می‌پذیرم.
+                        </label>
+                    </div>
+
+                    <!-- بند ۲ -->
+                    <div class="flex items-start">
+                        <input id="clause2" name="clause2_will" type="checkbox" required
+                               class="h-4 w-4 text-treaty-primary border-gray-300 rounded focus:ring-treaty-primary mt-1">
+                        <label for="clause2" class="mr-2 block text-sm text-gray-900">
+                            اذعان می‌دارم که این تعهدنامه بدون هیچ‌گونه اجبار و با اراده آزاد صورت گرفته است.
+                        </label>
+                    </div>
+                    
+                    <!-- بند ۳ -->
+                    <div class="flex items-start">
+                        <input id="clause3" name="clause3_report" type="checkbox" required
+                               class="h-4 w-4 text-treaty-primary border-gray-300 rounded focus:ring-treaty-primary mt-1">
+                        <label for="clause3" class="mr-2 block text-sm text-gray-900">
+                            تعهد می‌کنم در صورت مشاهده تخلف از سوی سایر اعضا، مراتب را بلافاصله به دبیرخانه اتحادیه گزارش دهم.
+                        </label>
+                    </div>
+
+                    <!-- تیک جامع نهایی -->
+                    <div class="flex items-start pt-4 border-t border-gray-200">
+                        <input id="final_confirmation" name="final_confirmation" type="checkbox" required
+                               class="h-5 w-5 text-treaty-primary border-gray-400 rounded focus:ring-treaty-primary mt-1">
+                        <label for="final_confirmation" class="mr-2 block text-base font-extrabold text-danger">
+                            تمام موارد فوق را خوانده‌ام، مفاد تعهدنامه، مزایا و عواقب نقض آن را به طور کامل پذیرفته و تأیید می‌کنم.
+                        </label>
+                    </div>
+                </div>
+                
+            </div>
+
+            <!-- دکمه نهایی سازی قرارداد (به منزله امضای نهایی) -->
+            <div class="pt-8">
+                <button type="submit" id="submit-button"
+                        class="w-full flex justify-center py-3 px-4 border-2 border-treaty-primary rounded-lg shadow-xl text-lg font-bold text-white bg-treaty-primary hover:bg-treaty-primary/90 focus:outline-none focus:ring-4 focus:ring-treaty-primary/50 transition duration-300 transform hover:scale-[1.01]">
+                    تأیید نهایی و پیوستن به اتحادیه
+                </button>
+                <p class="text-center text-xs text-gray-500 mt-2">پر کردن فرم به منزله پذیرش و امضای الکترونیک مفاد این سند است.</p>
+            </div>
+
+            <footer class="text-center text-xs text-gray-500 mt-6 pt-4 border-t">
+                <p>شماره ثبت سند: AGID/VOLUNTEER/2025/XYZ</p>
+            </footer>
+
+        </form>
+
+    </div>
+    
+    <!-- صفحه موفقیت کاملاً از HTML حذف شده است و با JS ساخته می شود. -->
+
+
+    <script>
+        document.getElementById('treaty-form').addEventListener('submit', function(e) {
+            e.preventDefault(); // جلوگیری از ارسال فرم به روش سنتی
+
+            const form = e.target;
+            
+            // 1. اعتبارسنجی فیلدهای ضروری (دوباره برای اطمینان)
+            const fullName = document.getElementById('full-name').value;
+            const country = document.getElementById('country').value;
+            const commitmentLevelElement = form.querySelector('input[name="commitment_level"]:checked');
+            const duration = document.getElementById('duration').value;
+            const finalConfirmation = document.getElementById('final_confirmation').checked;
+
+            if (!fullName || !country || !commitmentLevelElement || !duration || !finalConfirmation) {
+                // نمایش پیام خطا اگر اعتبارسنجی HTML کافی نباشد
+                document.getElementById('status-message').textContent = 'لطفاً تمامی فیلدهای الزامی و تأیید نهایی را علامت بزنید.';
+                document.getElementById('status-message').className = 'mb-6 p-4 rounded-lg text-center font-bold bg-red-100 text-red-700';
+                document.getElementById('status-message').classList.remove('hidden');
+                return;
+            }
+
+            // 2. پنهان کردن فرم اصلی
+            document.getElementById('main-content').style.display = 'none';
+
+            // 3. ساخت HTML صفحه موفقیت به صورت دینامیک
+            const successScreenHTML = `
+                <div id="success-screen-dynamic" class="full-screen-success flex items-center justify-center p-8 text-center">
+                    <div class="max-w-xl w-full p-8 bg-white border-4 border-success rounded-xl shadow-3xl transform transition duration-500">
+                        <svg class="w-20 h-20 mx-auto text-success mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <h2 class="text-3xl font-extrabold text-success mb-4">✅ تعهدنامه با موفقیت ثبت شد.</h2>
+                        <p class="text-xl font-bold text-gray-800 mb-6">وظیفه نهایی شما ابلاغ رسمی تعهد است:</p>
+                        
+                        <div class="p-4 bg-yellow-50 border-2 border-yellow-500 rounded-lg">
+                            <p class="text-lg text-gray-900 font-extrabold leading-relaxed">
+                                لطفاً ویدیوی ضبط شده از مراحل تکمیل فرم را فوراً برای ارسال کننده فرم بفرستید.
+                            </p>
+                            <p class="text-sm text-gray-600 mt-2">
+                                این ویدیو به عنوان <strong class="font-bold">مدرک اولیه تعهد داوطلبانه</strong> و برای فعال‌سازی امتیازات رسمی شما نزد دبیرخانه اتحادیه الزامی است.
+                            </p>
+                        </div>
+                        
+                        <p class="text-sm text-gray-500 mt-6">سپاس از تعهد شما به اصول نادیده‌گیری AGID.</p>
+                    </div>
+                </div>
+            `;
+            
+            // 4. تزریق HTML ساخته شده به بدنه سند
+            document.body.insertAdjacentHTML('beforeend', successScreenHTML);
+            
+            // 5. اعمال تنظیمات تمام صفحه
+            document.body.style.overflow = 'hidden'; // جلوگیری از اسکرول شدن
+            document.getElementById('submit-button').disabled = true; // غیرفعال کردن دکمه
+
+        });
+    </script>
+</body>
+</html>
+
